@@ -2,38 +2,21 @@ import subprocess
 
 from config import Config
 
-aliasalgo = Config("-aa", True, ("NONE", "FLOWSENSITIVE", "PTSBASED", "LAZY"))
-aliasflowins = Config("-af")
-callbackanalyzer = Config("-ca", True, ("FAST",))
-codeelimination = Config("-ce", True, ("NONE", "PROPAGATECONSTS", "REMOVECODE"))
-cgalgo = Config("-cg", True, ("AUTO", "CHA", "VTA", "RTA", "SPARK", "GEOM"))
-paths = Config("-cp")
-callbacksourcemode = Config("-cs", True, ("NONE", "ALL", "SOURCELIST"))
-direction = Config("-dir", True, ("FORWARDS", "BACKWARDS"))
-dataflowsolver = Config("-ds", True, ("CONTEXTFLOWSENSITIVE","FLOWINSENSITIVE"))
-analyzeframeworks = Config("-ff")
-implicit = Config("-i", True, ("NONE", "ARRAYONLY", "ALL"))
-layoutmode = Config("-l", True, ("NONE", "PWD","ALL"))
-logsourcesandsinks = Config("-ls")
-nocallbacks = Config("-nc")
-noexceptions = Config("-ne")
-noiccresultspurify = Config("-np")
-nothischainreduction = Config("-nr")
-nostatic = Config("-ns")
-notypechecking = Config("-nt")
-outputlinenumbers = Config("-ol")
-originalnames = Config("-on")
-onesourceatatime = Config("-os")
-onecomponentatatime = Config("-ot")
-pathalgo = Config("-pa", True, ("CONTEXTSENSITIVE","CONTEXTINSENSITIVE", "SOURCESONLY"))
-pathreconstructionmode = Config("-pr", True, ("NONE", "FAST", "PRECISE"))
-pathspecificresults = Config("-ps")
-enablereflection = Config("-r")
-singlejoinpointabstraction = Config("-sa")
-staticmode = Config("-sf", True, ("CONTEXTFLOWSENSITIVE", "CONTEXTFLOWINSENSITIVE", "NONE"))
-sequentialpathprocessing = Config("-sp")
+con = open("configurations.txt", "r")
+
+for i in con:
+    word = i.rstrip('\n').split(" ")
+
+    if len(word) == 1:
+        Config(word[0])
+    else:
+        Config(word[0], True, word[1: len(word) - 1])
 
 configs = Config.configs
+
+for i in configs:
+    print(i)
+input(configs)
 
 base = "java -jar /Users/Jericko/Flowdroid/soot-infoflow-cmd/target/soot-infoflow-cmd-jar-with-dependencies.jar \
         -a /Users/Jericko/Documents/Flowdroid/apks/Library2.apk \
@@ -62,7 +45,7 @@ for i in configs:
     cmd = base
 
     name += " + " + i.getSymbol()
-    cmd += r" \ " + i.getSymbol()
+    cmd += " \ " + i.getSymbol()
 
     if i.hasSubconfigs():
         for k in i.getSubconfigs():
